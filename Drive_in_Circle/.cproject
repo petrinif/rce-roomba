@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<?fileVersion 4.0.0?>
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+  
+	
+  <storageModule moduleId="org.eclipse.cdt.core.settings">
+    
+		
+    <cconfiguration id="cdt.managedbuild.toolchain.gnu.base.1264587987">
+      
+			
+      <storageModule moduleId="org.eclipse.cdt.core.settings" name="Default" id="cdt.managedbuild.toolchain.gnu.base.1264587987" buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider">
+        
+				
+        <externalSettings/>
+        
+				
+        <extensions>
+          
+					
+          <extension point="org.eclipse.cdt.core.BinaryParser" id="org.eclipse.cdt.core.ELF"/>
+          
+					
+          <extension point="org.eclipse.cdt.core.ErrorParser" id="org.eclipse.cdt.core.GmakeErrorParser"/>
+          
+					
+          <extension point="org.eclipse.cdt.core.ErrorParser" id="org.eclipse.cdt.core.GLDErrorParser"/>
+          
+					
+          <extension point="org.eclipse.cdt.core.ErrorParser" id="org.eclipse.cdt.core.GASErrorParser"/>
+          
+					
+          <extension point="org.eclipse.cdt.core.ErrorParser" id="org.eclipse.cdt.core.CWDLocator"/>
+          
+					
+          <extension point="org.eclipse.cdt.core.ErrorParser" id="org.eclipse.cdt.core.GCCErrorParser"/>
+          
+				
+        </extensions>
+        
+			
+      </storageModule>
+      
+			
+      <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        
+				
+        <configuration id="cdt.managedbuild.toolchain.gnu.base.1264587987" name="Default" description="" buildProperties="" parent="org.eclipse.cdt.build.core.emptycfg" artifactName="Test_Serial">
+          
+					
+          <folderInfo id="cdt.managedbuild.toolchain.gnu.base.1264587987.815435577" name="/" resourcePath="">
+            
+						
+            <toolChain superClass="cdt.managedbuild.toolchain.gnu.base" id="cdt.managedbuild.toolchain.gnu.base.733467948" name="cdt.managedbuild.toolchain.gnu.base">
+              
+							
+              <targetPlatform superClass="cdt.managedbuild.target.gnu.platform.base" id="cdt.managedbuild.target.gnu.platform.base.982615620" name="Debug Platform" binaryParser="org.eclipse.cdt.core.ELF" osList="linux,hpux,aix,qnx" archList="all"/>
+              
+							
+              <builder superClass="cdt.managedbuild.target.gnu.builder.base" id="cdt.managedbuild.target.gnu.builder.base.1084973508" name="Gnu Make Builder" managedBuildOn="true" keepEnvironmentInBuildfile="false" buildPath="${workspace_loc:/Test_Serial/Default}"/>
+              
+							
+              <tool superClass="cdt.managedbuild.tool.gnu.archiver.base" id="cdt.managedbuild.tool.gnu.archiver.base.748145483" name="GCC Archiver"/>
+              
+							
+              <tool superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base" id="cdt.managedbuild.tool.gnu.cpp.compiler.base.390668174" name="GCC C++ Compiler">
+                
+								
+                <inputType superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input" id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1891341052"/>
+                
+							
+              </tool>
+              
+							
+              <tool superClass="cdt.managedbuild.tool.gnu.c.compiler.base" id="cdt.managedbuild.tool.gnu.c.compiler.base.507239280" name="GCC C Compiler">
+                
+								
+                <inputType superClass="cdt.managedbuild.tool.gnu.c.compiler.input" id="cdt.managedbuild.tool.gnu.c.compiler.input.180809819"/>
+                
+							
+              </tool>
+              
+							
+              <tool superClass="cdt.managedbuild.tool.gnu.c.linker.base" id="cdt.managedbuild.tool.gnu.c.linker.base.562822058" name="GCC C Linker"/>
+              
+							
+              <tool superClass="cdt.managedbuild.tool.gnu.cpp.linker.base" id="cdt.managedbuild.tool.gnu.cpp.linker.base.1070837706" name="GCC C++ Linker">
+                
+								
+                <option superClass="gnu.cpp.link.option.libs" id="gnu.cpp.link.option.libs.2096242193" name="Libraries (-l)" valueType="libs">
+                  
+									
+                  <listOptionValue value="serial" builtIn="false"/>
+                  
+								
+                </option>
+                
+								
+                <option superClass="gnu.cpp.link.option.paths" id="gnu.cpp.link.option.paths.1925369" name="Library search path (-L)" valueType="libPaths">
+                  
+									
+                  <listOptionValue value="/usr/lib/local" builtIn="false"/>
+                  
+								
+                </option>
+                
+								
+                <inputType superClass="cdt.managedbuild.tool.gnu.cpp.linker.input" id="cdt.managedbuild.tool.gnu.cpp.linker.input.125177362">
+                  
+									
+                  <additionalInput paths="$(USER_OBJS)" kind="additionalinputdependency"/>
+                  
+									
+                  <additionalInput paths="$(LIBS)" kind="additionalinput"/>
+                  
+								
+                </inputType>
+                
+							
+              </tool>
+              
+							
+              <tool superClass="cdt.managedbuild.tool.gnu.assembler.base" id="cdt.managedbuild.tool.gnu.assembler.base.727521861" name="GCC Assembler">
+                
+								
+                <inputType superClass="cdt.managedbuild.tool.gnu.assembler.input" id="cdt.managedbuild.tool.gnu.assembler.input.640263663"/>
+                
+							
+              </tool>
+              
+						
+            </toolChain>
+            
+					
+          </folderInfo>
+          
+				
+        </configuration>
+        
+			
+      </storageModule>
+      
+			
+      <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+      
+		
+    </cconfiguration>
+    
+	
+  </storageModule>
+  
+	
+  <storageModule moduleId="scannerConfiguration"/>
+  
+	
+  <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+    
+		
+    <project id="Test_Serial.null.2011784676" name="Test_Serial"/>
+    
+	
+  </storageModule>
+  
+	
+  <storageModule moduleId="refreshScope" versionNumber="1">
+    
+		
+    <resource workspacePath="/Test_Serial" resourceType="PROJECT"/>
+    
+	
+  </storageModule>
+  
+	
+  <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+  
+
+</cproject>

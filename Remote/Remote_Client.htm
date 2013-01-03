@@ -1,0 +1,354 @@
+<!DOCTYPE htm>
+<htm>
+<body>
+
+<h1>Remote Control: Roomba</h1>
+
+<head> 
+To remotely control the Roomba first select which type you want to utilize.  <br/>
+Low level control: Send speed of the wheels and turning radius. <br/>
+High level control: Select speed, start typing in the "Control" box to drive<br/>
+</head>
+
+<br/>
+<br/>
+<form>
+IP: <input type="text" id="IP" size="15" value = "127.0.0.1" />
+<br/>
+<br/>
+Distance Traveled: <input type="text" id="dist" size="15" value = "0" /> mm. <button type="button" onclick="reset_dist()" >Reset </button>
+</form>
+
+<p>
+<button type="button" onclick="Connect()" >Connect </button> <button type="button" onclick="Disconnect()" >Disconnect</button> <button type="button" onclick="Stop()" >Stop the Roomba</button> 
+</p>
+
+<a href="javascript:toggle('message1')">Low Level Control</a>
+ 
+<div id="message1" style="display: none;">
+ 	<br/>
+	<head>Insert desired speed and turning radius, then click "Send Command"
+	</head>
+ 	<br/>
+ 	<br/>
+	<form>
+	Speed: <input type="text" id="Speed" size="15" value = "0" />
+	Radius: <input type="text" id="Radius" size="15" value = "0"/>
+	</form>
+
+
+	<p>
+	<button type="button" onclick="Send_Command()" >Send Command</button>
+	</p>
+
+ 
+</div>
+
+<br/>
+<br/>
+
+<a href="javascript:toggle('message2')">High Level Control</a>
+ 
+<div id="message2" style="display: none;">
+ 	<br/>
+	<head>Use the "w a s d" keys to move the Roomba around
+	</head>
+ 	<br/>
+ 	<br/>
+	<form>
+	Speed: <input type="text" id="Speed2" size="15" value = "0" />
+	Control: <input type="text" id="char" size="15" />
+	Direction: <input type="text" id="Dir" size="15" value = "none" />
+	</form>
+ 	<br/>
+
+ 
+</div>
+
+
+
+<br/>
+<br/>
+
+<div id="messages"> </div>
+
+<script language="javascript" src="json2.js" src="jquery.js" ></script>
+
+<script type="text/javascript">
+
+var Moving_Code = 0
+var charfield=document.getElementById("char")
+var socket;
+var host;
+var connected = 0;
+var counter = 0;
+
+function checkcounter(){
+	if (counter > 25){
+		document.getElementById("messages").innerHTML=" ";
+		counter = 0;
+	}
+}
+
+charfield.onkeydown=function(e){
+	var key = document.getElementById("char").innerHTML
+	var e=window.event || e
+	var keyunicode=e.charCode || e.keyCode
+	Moving_Code = keyunicode
+	
+
+	document.getElementById("char").value=key
+	if (keyunicode==87)
+	{
+		document.getElementById("Dir").value="Move Forwards";
+		var message = Compose_Message2()
+	}
+	else if (keyunicode==65)
+	{
+		document.getElementById("Dir").value="Turn Left";
+		var message = Compose_Message2()
+	}
+	else if (keyunicode==83)
+	{
+		document.getElementById("Dir").value="Move Backwards";
+		var message = Compose_Message2()
+	}
+	else if (keyunicode==68)
+	{
+		document.getElementById("Dir").value="Turn Right"
+		var message = Compose_Message2()
+	}
+	else
+	{
+		document.getElementById("Dir").value="none"
+	}
+
+	
+
+	if (socket == undefined || socket.readyState != 1) {
+		document.getElementById("messages").innerHTML += "Client: Websocket is not avaliable for writing; connect first"+ "<br/>";
+		counter +=1
+		checkcounter()
+		return;
+	}
+
+	socket.send(message)
+	document.getElementById("messages").innerHTML+="Message Sent"+ "<br/>"
+	counter +=1
+    	//socket.close();
+
+	//socket = new WebSocket(host);
+	checkcounter()
+
+
+}
+
+
+function reset_dist(){
+	var message = Compose_Message3()
+	if (socket == undefined || socket.readyState != 1) {
+		document.getElementById("messages").innerHTML += "Client: Websocket is not avaliable for writing; connect first"+ "<br/>";
+		counter +=1
+		checkcounter()
+		return;
+	}
+
+	socket.send(message)
+	document.getElementById("messages").innerHTML+="Reset distance Sent"+ "<br/>"
+	counter +=1
+    	//socket.close();
+
+	//socket = new WebSocket(host);
+	checkcounter()
+
+ 
+}
+
+function toggle(element) {
+    document.getElementById(element).style.display = (document.getElementById(element).style.display == "none") ? "" : "none";
+}
+
+
+
+function Connect(){	
+
+
+	var IP = document.getElementById("IP").value
+	document.getElementById("messages").innerHTML="IP: " + IP+ "<br/>"
+	counter +=1
+
+	host = "ws://"+IP+":9000";
+
+	if ("WebSocket" in window) {
+		socket = new WebSocket(host);
+	} else if ("MozWebSocket" in window) {
+		socket = new MozWebSocket(host);
+	} else {
+		document.getElementById("messages").innerHTML += "This Browser does not support WebSockets"+ "<br/>";
+		counter +=1
+		checkcounter()
+		return;
+	}
+
+
+	socket.onopen = function() {
+	       	console.log("connected to " + host);
+		document.getElementById("messages").innerHTML+="Connected to: "+host + "<br/>"
+		counter +=1
+	}
+	
+
+	socket.onclose = function(e) {
+	       	console.log("connection terminated (" + e.code + ")");
+		document.getElementById("messages").innerHTML+="Connection Terminated" + "<br/>"
+		counter +=1
+	}
+
+
+	socket.onmessage = function(e) {
+		document.getElementById("dist").value=e.data;
+	       	console.log("message received: " + e.data);
+	}
+	checkcounter()
+
+
+}
+
+
+function Send_Command(){
+	var message = Compose_Message()
+	if (socket == undefined || socket.readyState != 1) {
+		document.getElementById("messages").innerHTML += "Client: Websocket is not avaliable for writing; connect first"+ "<br/>";
+		counter +=1
+		checkcounter()
+		return;
+	}
+
+	socket.send(message)
+	document.getElementById("messages").innerHTML+="Message Sent"+ "<br/>"
+	counter +=1
+    	//socket.close();
+
+	//socket = new WebSocket(host);
+	checkcounter()
+
+ 
+}
+
+
+function Compose_Message(){
+	// Reading the form
+	var Speed = document.getElementById("Speed").value
+	document.getElementById("messages").innerHTML+="Speed: " + Speed + " mm/s"+ "<br/>"
+	counter +=1
+	var Radius = document.getElementById("Radius").value
+	document.getElementById("messages").innerHTML+="Radius: " + Radius + " mm"+ "<br/>"
+	counter +=1
+
+
+	var message =  {"type": "DM",
+			"data" : {  "dest" : "roomba",
+				    "orig" : "gui",
+				    "type" : "none",
+				    "msgID" : "1",
+				    "msg" :{    
+						"Speed" : Speed,
+						"Radius" : Radius
+						}
+			 
+				}
+			}
+
+
+	checkcounter()
+	return message.toJSONString()
+}
+
+function Compose_Message2(){
+	// Reading the form
+	var Speed = document.getElementById("Speed2").value
+
+	var message =  {"type": "DM",
+			"data" : {  "dest" : "roomba",
+				    "orig" : "gui",
+				    "type" : "none",
+				    "msgID" : "2",
+				    "msg" :{    
+						"Speed" : Speed,
+						"Moving_Code" : Moving_Code.toString()
+						}
+			 
+				}
+			}
+
+
+	checkcounter()
+	return message.toJSONString()
+}
+
+function Compose_Message3(){
+	var message =  {"type": "DM",
+			"data" : {  "dest" : "roomba",
+				    "orig" : "gui",
+				    "type" : "none",
+				    "msgID" : "3",
+				    "msg" :{    
+						"Speed" : "nan",
+						"Moving_Code" : "nan"
+						}
+			 
+				}
+			}
+
+
+	checkcounter()
+	return message.toJSONString()
+}
+
+function Disconnect(){
+	document.getElementById("dist").value=0;
+    	socket.close();
+    	document.getElementById("messages").innerHTML = "Disconnected"+ "<br/>";
+	}
+
+function Stop(){
+	var Speed = 0;
+	var Radius = 0;
+	var message =  {"type": "DM",
+			"data" : {  "dest" : "roomba",
+				    "orig" : "gui",
+				    "type" : "none",
+				    "msgID" : "1",
+				    "msg" :{    
+						"Speed" : Speed.toString(),
+						"Radius" : Radius.toString()
+						}
+			 
+				}
+			}
+
+	message = message.toJSONString()
+
+	if (socket == undefined || socket.readyState != 1) {
+		document.getElementById("messages").innerHTML += "Client: Websocket is not avaliable for writing; connect first"+ "<br/>";
+		counter +=1
+		checkcounter()
+		return;
+	}
+
+	socket.send(message)
+	document.getElementById("messages").innerHTML+="Stop Signal Sent"+ "<br/>"
+	counter +=1
+    	//socket.close();
+
+	//socket = new WebSocket(host);
+	checkcounter()
+
+	}
+
+</script>
+
+</body>
+</html>
+
+
