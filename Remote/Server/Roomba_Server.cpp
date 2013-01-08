@@ -1,6 +1,7 @@
 #include "websocketpp/src/websocketpp.hpp"
 #include "JSON_Handling.h"
 #include "Serial_lib.h"
+#include "Timeout.h"
 
 #include <cstring>
 #include <string.h>
@@ -9,10 +10,12 @@
 #include <cstdlib>
 #include <time.h>
 #include <SerialStream.h>
+#include <pthread.h> // Used in order to create a new thread which will watch the Roomba timeout
+
 
 using namespace LibSerial ;
 using websocketpp::server;
-
+using namespace std;
 
 // Packet numbers which are sent to the Roomba
 const char         Start = 128;
@@ -20,6 +23,8 @@ const char         FullMode = 132;
 const char         Drive = 137;                // 4:   [Vel. Hi] [Vel Low] [Rad. Hi] [Rad. Low]
 const char         LED_Color = 139;
 extern int 	   Distance_trav;
+double	   	   elapsed = 0;
+extern clock_t     begin;
 
 
 class echo_server_handler : public server::handler {
@@ -31,11 +36,11 @@ public:
 	opens a serial port with open_serial_port and starts streaming
 	the command*/
     void on_message(connection_ptr con, message_ptr msg) {
+	begin = clock();
 	std::string message = msg ->get_payload();
 	int i,result = 0;
 	const int BUFFER_SIZE = 11;
 	char buffer[BUFFER_SIZE] = {0};
-
 	Command_1 cmd1;
 	Command_2 cmd2;
 
@@ -182,6 +187,16 @@ int main(int argc, char* argv[]) {
     }
     
     try {   
+ 
+	/* Check for timeout on message income in order to stop the Roomba if the client terminates the connection
+	This is done by creating a watchdog thread located in the timeout.h file*/
+	pthread_t thread1;
+     	int  iret1,arg = 0;
+     	iret1 = pthread_create( &thread1, NULL, check_message_timeout, (void*) arg);
+	std::cout << "Timeout check Thread started: " << iret1 << std::endl;
+
+
+	// Starting server stuff
         server::handler::ptr h(new echo_server_handler());
         server echo_endpoint(h);
         

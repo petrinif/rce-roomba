@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <time.h>
+#include <math.h>
 #include <SerialStream.h>
 
 #ifndef Serial_lib
@@ -19,5 +20,7 @@ should be connected */
 int open_serial_port(SerialStream &serial_port);
 
 
+/* This function returns the distance traveled by the Roomba, the 
+distance is written in the global variable Distance_trav*/
 void get_distance(SerialStream &serial_port);
 #endif

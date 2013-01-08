@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <time.h>
+#include <math.h>
 #include <SerialStream.h>
 
 
@@ -87,11 +88,12 @@ int open_serial_port(SerialStream &serial_port){
 
 
 
-// This function returns the distance traveled by the roomba
+/* This function returns the distance traveled by the Roomba, the 
+distance is written in the global variable Distance_trav*/
 
 void get_distance(SerialStream &serial_port){
 			char data_stream[200] = {0};
-			const int distance_size = 11;
+			const int distance_size = 9;
 			char request[distance_size] = {0};
 			char next_byte=0;
 			int i;
@@ -128,9 +130,8 @@ void get_distance(SerialStream &serial_port){
 			for (i=0; i<20; i++) {
 				serial_port.read( &next_byte, 1 );
 				data_stream[i] = next_byte;
-			std::cout << short(next_byte) <<  std::endl;
-				
-				if(i>4 && next_byte ==19)
+				std::cout << short(data_stream[i]) <<  std::endl;
+				if(i>10 && next_byte ==19)
 					break;
 			}
 
@@ -149,12 +150,10 @@ void get_distance(SerialStream &serial_port){
 
 			distance_low_byte = data_stream[3];
 			distance_high_byte = data_stream[2];
-			std::cout << short(distance_low_byte) <<  std::endl;
-			std::cout << short(distance_high_byte) <<  std::endl;
 		
 			distance_traveled = (distance_high_byte << 8);
 			distance_traveled = (distance_traveled | distance_low_byte);
-			std::cout << distance_traveled <<  std::endl;
+			std::cout << "Dist traveled: " << distance_traveled <<  std::endl;
 
 			if (first == 1){
 				distance_traveled = 0;
@@ -162,7 +161,7 @@ void get_distance(SerialStream &serial_port){
 			}
 			
 			// calculating traveled distance: [mm]
-			Distance_trav = (Distance_trav + distance_traveled);
+			Distance_trav = (Distance_trav + abs(distance_traveled));
 			
 			serial_port.Close();
 			open_serial_port(serial_port);
